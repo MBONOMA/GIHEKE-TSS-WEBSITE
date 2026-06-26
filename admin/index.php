@@ -791,6 +791,13 @@
               <p>Books & Past Papers</p>
             </div>
           </a>
+          <a href="elearning.php" class="dash-card-modern" data-aos="fade-up" data-aos-delay="150">
+            <div class="dash-card-icon-modern orange"><i class="bi bi-book-open"></i></div>
+            <div class="dash-card-info">
+              <h4>E-Learning</h4>
+              <p>Learning Materials</p>
+            </div>
+          </a>
 
           <a href="studentMessage.php" class="dash-card-modern" data-aos="fade-up" data-aos-delay="200">
             <div class="dash-card-icon-modern teal"><i class="bi bi-chat-dots"></i></div>

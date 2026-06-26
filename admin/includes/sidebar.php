@@ -117,6 +117,17 @@
 
 
 
+      <li class="nav-item">
+        <a class="nav-link collapsed" data-bs-target="#elearning" data-bs-toggle="collapse" href="#">
+          <i class="bi bi-book-open"></i>
+          <span>E-Learning</span>
+          <i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="elearning" class="nav-content collapse" data-bs-parent="#sidebar-nav">
+          <li><a href="elearning.php"><i class="bi bi-arrow-bar-right"></i><span>Manage Materials</span></a></li>
+        </ul>
+      </li>
+
       <li><span class="sidebar-section-label">Site Management</span></li>
 
       <li class="nav-item">

@@ -186,27 +186,33 @@ $contentStats['seo'] = getContentCount($conn, 'tbl_seo_meta');
         </a>
       </div>
 
-      <h3 class="section-title"><i class="bi bi-mortarboard"></i> Academics</h3>
-      <div class="cm-grid">
-        <a href="studentApplication.php" class="cm-card">
-          <div class="icon-wrap" style="background:#eef2ff;color:#525FE1;"><i class="bi bi-folder-check"></i></div>
-          <h3>Applications</h3>
-          <p>Student admission applications</p>
-          <span class="count warn"><?php echo $contentStats['applications']; ?> pending</span>
-        </a>
-
-          <div class="icon-wrap" style="background:#fce7f3;color:#db2777;"><i class="bi bi-book"></i></div>
-          <h3>Books & Past Papers</h3>
-          <p>E-learning resources</p>
-          <span class="count"><?php echo $contentStats['books']; ?> items</span>
-        </a>
-
-          <div class="icon-wrap" style="background:#e0f2fe;color:#0284c7;"><i class="bi bi-journal-text"></i></div>
-          <h3>Assignments</h3>
-          <p>School assignments & works</p>
-          <span class="count"><?php echo $contentStats['works']; ?> items</span>
-        </a>
-      </div>
+       <h3 class="section-title"><i class="bi bi-mortarboard"></i> Academics</h3>
+       <div class="cm-grid">
+         <a href="studentApplication.php" class="cm-card">
+           <div class="icon-wrap" style="background:#eef2ff;color:#525FE1;"><i class="bi bi-folder-check"></i></div>
+           <h3>Applications</h3>
+           <p>Student admission applications</p>
+           <span class="count warn"><?php echo $contentStats['applications']; ?> pending</span>
+         </a>
+         <a href="manage-books.php" class="cm-card">
+           <div class="icon-wrap" style="background:#fce7f3;color:#db2777;"><i class="bi bi-book"></i></div>
+           <h3>Books & Past Papers</h3>
+           <p>E-learning resources</p>
+           <span class="count"><?php echo $contentStats['books']; ?> items</span>
+         </a>
+         <a href="manage-works.php" class="cm-card">
+           <div class="icon-wrap" style="background:#e0f2fe;color:#0284c7;"><i class="bi bi-journal-text"></i></div>
+           <h3>Assignments</h3>
+           <p>School assignments & works</p>
+           <span class="count"><?php echo $contentStats['works']; ?> items</span>
+         </a>
+         <a href="elearning.php" class="cm-card">
+           <div class="icon-wrap" style="background:#f0fdf4;color:#16a34a;"><i class="bi bi-book-open"></i></div>
+           <h3>E-Learning Materials</h3>
+           <p>Upload & manage learning materials</p>
+           <span class="count"><i class="bi bi-upload"></i> Upload</span>
+         </a>
+       </div>
 
       <h3 class="section-title"><i class="bi bi-people"></i> People</h3>
       <div class="cm-grid">
