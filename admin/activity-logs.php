@@ -45,30 +45,40 @@ $actionsQuery = mysqli_query($conn, "SELECT DISTINCT `action` FROM `tbl_activity
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
   <link href="assets/css/admin-2027-theme.css" rel="stylesheet">
   <link href="assets/css/giheke-toast.css" rel="stylesheet">
-  <style>
-    .logs-card { background: #fff; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); padding: 24px; border: 1px solid rgba(0,0,0,0.04); }
-    .filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
-    .filter-bar select, .filter-bar input { padding: 8px 14px; border: 2px solid #e8e8e8; border-radius: 10px; font-size: 0.85rem; background: #fafafa; }
-    .filter-bar select:focus, .filter-bar input:focus { border-color: #525FE1; outline: none; }
-    .filter-bar .btn-filter { padding: 8px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; border: none; background: #525FE1; color: #fff; }
-    .filter-bar .btn-filter:hover { background: #3D47C9; }
-    .log-entry { display: flex; gap: 16px; padding: 14px 0; border-bottom: 1px solid #f5f5f5; align-items: flex-start; }
-    .log-entry:last-child { border-bottom: none; }
-    .log-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; flex-shrink: 0; }
-    .log-icon.create { background: #e8f5e9; color: #2e7d32; }
-    .log-icon.update { background: #e3f2fd; color: #1565c0; }
-    .log-icon.delete { background: #fce4ec; color: #c62828; }
-    .log-icon.upload { background: #fff3e0; color: #e65100; }
-    .log-icon.default { background: #f3e5f5; color: #6a1b9a; }
-    .log-content { flex: 1; min-width: 0; }
-    .log-content .action { font-weight: 700; font-size: 0.88rem; color: #333; text-transform: capitalize; }
-    .log-content .desc { font-size: 0.82rem; color: #666; margin-top: 2px; }
-    .log-content .meta { font-size: 0.75rem; color: #aaa; margin-top: 4px; }
-    .log-content .meta span { margin-right: 16px; }
-    .empty-state { text-align: center; padding: 60px 20px; color: #999; }
-    .empty-state i { font-size: 3rem; color: #d0d5dd; margin-bottom: 16px; display: block; }
-    .badge-action { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.72rem; font-weight: 600; }
-  </style>
+    <style>
+      .logs-card { background: #fff; border-radius: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.06); padding: 24px; border: 1px solid rgba(0,0,0,0.04); }
+      .filter-bar { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+      .filter-bar select { padding: 10px 16px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 0.85rem; background: #fafafa; min-width: 160px; }
+      .filter-bar select:focus { border-color: #525FE1; outline: none; }
+      .search-advanced { position: relative; flex: 1; min-width: 220px; }
+      .search-advanced input { width: 100%; padding: 10px 44px 10px 42px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 0.85rem; background: #fafafa; transition: all 0.2s; }
+      .search-advanced input:focus { border-color: #525FE1; outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(82,95,225,0.08); }
+      .search-advanced .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+      .search-advanced .clear-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 50%; border: none; background: #e2e8f0; color: #475569; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px; }
+      .search-advanced .clear-btn:hover { background: #cbd5e1; }
+      .search-advanced.has-value .clear-btn { display: inline-flex; }
+      .search-dropdown { display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1060; max-height: 300px; overflow-y: auto; }
+      .search-dropdown.show { display: block; }
+      .search-dropdown .sd-section { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; }
+      .search-dropdown .sd-section:last-child { border-bottom: none; }
+      .search-dropdown .sd-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+      .search-dropdown .sd-chip { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 13px; background: #f1f5f9; color: #334155; border: none; cursor: pointer; margin: 3px 4px 3px 0; transition: all 0.15s; }
+      .search-dropdown .sd-chip:hover { background: #e0e7ff; color: #4338ca; }
+      .search-dropdown .sd-item { width: 100%; text-align: left; padding: 10px 14px; border: none; background: transparent; font-size: 14px; color: #334155; cursor: pointer; border-radius: 8px; margin: 2px 0; }
+      .search-dropdown .sd-item:hover { background: #eff6ff; color: #1d4ed8; }
+      .search-dropdown .sd-item strong { color: #1e40af; }
+      .no-results-box { text-align: center; padding: 40px 20px; background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; margin-top: 16px; color: #94a3b8; }
+      .no-results-box i { font-size: 40px; display: block; margin-bottom: 12px; color: #cbd5e1; }
+      .no-results-box h4 { color: #475569; font-weight: 600; margin-bottom: 6px; }
+      .no-results-box p { font-size: 13px; max-width: 360px; margin: 0 auto 16px; color: #64748b; }
+      @media (max-width: 768px) {
+        .search-advanced { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; z-index: 1060; padding: 12px; display: flex; flex-direction: column; }
+        .search-advanced .search-bar-mobile-top { display: flex !important; align-items: center; gap: 8px; }
+        .search-advanced input { font-size: 16px; padding: 12px 44px 12px 42px; border-radius: 10px; }
+        .search-advanced .search-dropdown { position: static; border-radius: 12px; margin-top: 10px; max-height: calc(100vh - 120px); }
+        .search-mobile-close { display: inline-flex !important; }
+      }
+    </style>
 </head>
 <body>
   <header id="header" class="header fixed-top d-flex align-items-center">
@@ -115,7 +125,21 @@ $actionsQuery = mysqli_query($conn, "SELECT DISTINCT `action` FROM `tbl_activity
               <option value="<?php echo htmlspecialchars($a['action']); ?>" <?php echo $actionFilter===$a['action']?'selected':''; ?>><?php echo htmlspecialchars(ucwords(str_replace('_',' ',$a['action']))); ?></option>
             <?php endwhile; ?>
           </select>
-          <input type="text" name="search" placeholder="Search logs..." value="<?php echo htmlspecialchars($search); ?>">
+          <div class="search-advanced" id="searchAdvancedLogs" style="flex:1;min-width:220px;">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="logsSearchInput" name="search" placeholder="Search logs..." value="<?php echo htmlspecialchars($search); ?>">
+            <button type="button" class="clear-btn" id="logsSearchClear"><i class="bi bi-x"></i></button>
+            <div class="search-dropdown" id="logsSearchDropdown">
+              <div class="sd-section">
+                <div class="sd-label"><i class="bi bi-clock-history"></i> Recent Searches</div>
+                <div id="logsRecentList"><p style="font-size:12px;color:#94a3b8;">No recent searches</p></div>
+              </div>
+              <div class="sd-section">
+                <div class="sd-label"><i class="bi bi-arrow-up-circle"></i> Trending</div>
+                <div id="logsTrendingList"></div>
+              </div>
+            </div>
+          </div>
           <button type="submit" class="btn-filter"><i class="bi bi-funnel"></i> Filter</button>
           <?php if ($actionFilter || $search): ?>
             <a href="activity-logs.php" class="btn-filter" style="background:#888;text-decoration:none;">Clear</a>
@@ -173,7 +197,6 @@ $actionsQuery = mysqli_query($conn, "SELECT DISTINCT `action` FROM `tbl_activity
   <script src="assets/js/giheke-toast.js"></script>
   <script>
   (function() {
-    'use strict';
     const sidebar = document.getElementById('sidebar');
     const main = document.getElementById('main');
     const toggleBtn = document.getElementById('sidebarToggle');
@@ -195,6 +218,84 @@ $actionsQuery = mysqli_query($conn, "SELECT DISTINCT `action` FROM `tbl_activity
       });
     }
   })();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('logsSearchInput');
+    const searchClear = document.getElementById('logsSearchClear');
+    const searchDropdown = document.getElementById('logsSearchDropdown');
+    const searchWrapper = document.getElementById('searchAdvancedLogs');
+    const recentList = document.getElementById('logsRecentList');
+    const trendingList = document.getElementById('logsTrendingList');
+    let debounceTimer = null;
+
+    const trending = ['Create', 'Update', 'Delete', 'Upload', 'System'];
+    let recent = [];
+    try { const stored = localStorage.getItem('logsRecentSearches'); if (stored) recent = JSON.parse(stored).slice(0, 5); } catch {}
+
+    function saveRecent(q) {
+      recent = [q, ...recent.filter(r => r !== q)].slice(0, 5);
+      localStorage.setItem('logsRecentSearches', JSON.stringify(recent));
+      renderRecent();
+    }
+
+    function renderRecent() {
+      if (!recentList) return;
+      if (recent.length === 0) {
+        recentList.innerHTML = '<p style="font-size:12px;color:#94a3b8;">No recent searches</p>';
+        return;
+      }
+      recentList.innerHTML = recent.map(r => `<button type="button" class="sd-chip" data-search="${r}">${r}</button>`).join('');
+      recentList.querySelectorAll('.sd-chip').forEach(btn => {
+        btn.addEventListener('click', () => { searchInput.value = btn.dataset.search; searchInput.form.submit(); });
+      });
+    }
+
+    function renderTrending() {
+      if (!trendingList) return;
+      trendingList.innerHTML = trending.map(t => `<button type="button" class="sd-chip" data-search="${t}">${t}</button>`).join('');
+      trendingList.querySelectorAll('.sd-chip').forEach(btn => {
+        btn.addEventListener('click', () => { searchInput.value = btn.dataset.search; searchInput.form.submit(); });
+      });
+    }
+
+    function highlight(text, q) {
+      if (!q) return text;
+      const idx = text.toLowerCase().indexOf(q.toLowerCase());
+      if (idx === -1) return text;
+      return text.slice(0, idx) + '<strong>' + text.slice(idx, idx + q.length) + '</strong>' + text.slice(idx + q.length);
+    }
+
+    function showDropdown() { if (searchDropdown) searchDropdown.classList.add('show'); }
+    function hideDropdown() { if (searchDropdown) searchDropdown.classList.remove('show'); }
+
+    if (searchInput) {
+      searchInput.addEventListener('focus', () => { renderRecent(); renderTrending(); showDropdown(); });
+      searchInput.addEventListener('input', function() {
+        const val = this.value;
+        if (searchWrapper) searchWrapper.classList.toggle('has-value', val.length > 0);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => this.form.submit(), 300);
+        showDropdown();
+      });
+      searchInput.addEventListener('blur', () => setTimeout(hideDropdown, 150));
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') { this.value = ''; hideDropdown(); this.form.submit(); }
+      });
+    }
+    if (searchClear) {
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        if (searchWrapper) searchWrapper.classList.remove('has-value');
+        hideDropdown();
+        searchInput.form.submit();
+      });
+    }
+    document.addEventListener('click', function(e) {
+      if (searchWrapper && !searchWrapper.contains(e.target)) hideDropdown();
+    });
+    renderRecent();
+    renderTrending();
+  });
   </script>
 </body>
 </html>

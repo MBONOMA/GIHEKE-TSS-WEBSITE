@@ -124,10 +124,38 @@ $cnt_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FRO
     .filter-tabs a:not(.active):hover { background: #e2e8f0; }
     .filter-tabs a .badge-c { background: rgba(0,0,0,0.12); padding: 1px 8px; border-radius: 10px; font-size: 0.72rem; }
     .filter-tabs a.active .badge-c { background: rgba(255,255,255,0.2); }
-    .search-bar { display: flex; gap: 10px; margin-bottom: 20px; }
+    .search-bar { display: flex; gap: 10px; margin-bottom: 20px; position: relative; }
     .search-bar input { flex: 1; padding: 10px 16px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 0.9rem; background: #fafafa; transition: all 0.2s; }
     .search-bar input:focus { border-color: #525FE1; outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(82,95,225,0.08); }
     .search-bar button { padding: 10px 20px; border-radius: 12px; font-weight: 600; border: none; background: #525FE1; color: #fff; }
+    .search-bar button:hover { background: #3D47C9; }
+    .search-advanced { position: relative; flex: 1; }
+    .search-advanced input { width: 100%; padding: 10px 44px 10px 42px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 0.9rem; background: #fafafa; transition: all 0.2s; }
+    .search-advanced input:focus { border-color: #525FE1; outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(82,95,225,0.08); }
+    .search-advanced .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+    .search-advanced .clear-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 50%; border: none; background: #e2e8f0; color: #475569; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px; }
+    .search-advanced .clear-btn:hover { background: #cbd5e1; }
+    .search-advanced.has-value .clear-btn { display: inline-flex; }
+    .search-dropdown { display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1050; max-height: 320px; overflow-y: auto; }
+    .search-dropdown.show { display: block; }
+    .search-dropdown .sd-section { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; }
+    .search-dropdown .sd-section:last-child { border-bottom: none; }
+    .search-dropdown .sd-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .search-dropdown .sd-chip { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 13px; background: #f1f5f9; color: #334155; border: none; cursor: pointer; margin: 3px 4px 3px 0; transition: all 0.15s; }
+    .search-dropdown .sd-chip:hover { background: #e0e7ff; color: #4338ca; }
+    .search-dropdown .sd-item { width: 100%; text-align: left; padding: 10px 14px; border: none; background: transparent; font-size: 14px; color: #334155; cursor: pointer; border-radius: 8px; margin: 2px 0; }
+    .search-dropdown .sd-item:hover { background: #eff6ff; color: #1d4ed8; }
+    .search-dropdown .sd-item strong { color: #1e40af; }
+    .no-results-box { text-align: center; padding: 40px 20px; background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; margin-top: 16px; }
+    .no-results-box i { font-size: 40px; display: block; margin-bottom: 12px; color: #cbd5e1; }
+    .no-results-box h4 { color: #475569; font-weight: 600; margin-bottom: 6px; }
+    .no-results-box p { font-size: 13px; max-width: 360px; margin: 0 auto 16px; color: #64748b; }
+    @media (max-width: 768px) {
+      .search-advanced { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; z-index: 1060; padding: 12px; display: flex; flex-direction: column; }
+      .search-advanced input { font-size: 16px; padding: 12px 44px 12px 42px; border-radius: 10px; }
+      .search-advanced .search-dropdown { position: static; border-radius: 12px; margin-top: 10px; max-height: calc(100vh - 120px); }
+      .search-mobile-close { display: inline-flex !important; }
+    }
     .app-table { width: 100%; border-collapse: collapse; }
     .app-table th { text-align: left; font-size: 0.75rem; font-weight: 700; color: #888; text-transform: uppercase; letter-spacing: 0.05em; padding: 12px 14px; border-bottom: 2px solid #f0f0f0; white-space: nowrap; }
     .app-table td { padding: 12px 14px; border-bottom: 1px solid #f5f5f5; font-size: 0.88rem; color: #333; }
@@ -221,7 +249,21 @@ $cnt_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FRO
         <!-- Search -->
         <form method="get" class="search-bar">
           <input type="hidden" name="status" value="<?php echo htmlspecialchars($statusFilter); ?>">
-          <input type="text" name="search" placeholder="Search by name, email, trade..." value="<?php echo htmlspecialchars($search); ?>">
+          <div class="search-advanced" id="searchAdvancedApp">
+            <i class="bi bi-search search-icon"></i>
+            <input type="text" id="appSearchInput" name="search" placeholder="Search by name, email, trade..." value="<?php echo htmlspecialchars($search); ?>">
+            <button type="button" class="clear-btn" id="appSearchClear"><i class="bi bi-x"></i></button>
+            <div class="search-dropdown" id="appSearchDropdown">
+              <div class="sd-section">
+                <div class="sd-label"><i class="bi bi-clock-history"></i> Recent Searches</div>
+                <div id="appRecentList"><p style="font-size:12px;color:#94a3b8;">No recent searches</p></div>
+              </div>
+              <div class="sd-section">
+                <div class="sd-label"><i class="bi bi-arrow-up-circle"></i> Trending</div>
+                <div id="appTrendingList"></div>
+              </div>
+            </div>
+          </div>
           <button type="submit"><i class="bi bi-search"></i> Search</button>
         </form>
 
@@ -396,6 +438,84 @@ $cnt_rejected = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as c FRO
       GihekeToast.showToast({title:'Notice', message: params.get('error'), type:'error'});
     }
   })();
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('appSearchInput');
+    const searchClear = document.getElementById('appSearchClear');
+    const searchDropdown = document.getElementById('appSearchDropdown');
+    const searchWrapper = document.getElementById('searchAdvancedApp');
+    const recentList = document.getElementById('appRecentList');
+    const trendingList = document.getElementById('appTrendingList');
+    let debounceTimer = null;
+
+    const trending = ['Pending Review', 'Approved', 'Rejected', 'New Application', 'Qualified'];
+    let recent = [];
+    try { const stored = localStorage.getItem('appRecentSearches'); if (stored) recent = JSON.parse(stored).slice(0, 5); } catch {}
+
+    function saveRecent(q) {
+      recent = [q, ...recent.filter(r => r !== q)].slice(0, 5);
+      localStorage.setItem('appRecentSearches', JSON.stringify(recent));
+      renderRecent();
+    }
+
+    function renderRecent() {
+      if (!recentList) return;
+      if (recent.length === 0) {
+        recentList.innerHTML = '<p style="font-size:12px;color:#94a3b8;">No recent searches</p>';
+        return;
+      }
+      recentList.innerHTML = recent.map(r => `<button type="button" class="sd-chip" data-search="${r}">${r}</button>`).join('');
+      recentList.querySelectorAll('.sd-chip').forEach(btn => {
+        btn.addEventListener('click', () => { searchInput.value = btn.dataset.search; searchInput.form.submit(); });
+      });
+    }
+
+    function renderTrending() {
+      if (!trendingList) return;
+      trendingList.innerHTML = trending.map(t => `<button type="button" class="sd-chip" data-search="${t}">${t}</button>`).join('');
+      trendingList.querySelectorAll('.sd-chip').forEach(btn => {
+        btn.addEventListener('click', () => { searchInput.value = btn.dataset.search; searchInput.form.submit(); });
+      });
+    }
+
+    function highlight(text, q) {
+      if (!q) return text;
+      const idx = text.toLowerCase().indexOf(q.toLowerCase());
+      if (idx === -1) return text;
+      return text.slice(0, idx) + '<strong>' + text.slice(idx, idx + q.length) + '</strong>' + text.slice(idx + q.length);
+    }
+
+    function showDropdown() { if (searchDropdown) searchDropdown.classList.add('show'); }
+    function hideDropdown() { if (searchDropdown) searchDropdown.classList.remove('show'); }
+
+    if (searchInput) {
+      searchInput.addEventListener('focus', () => { renderRecent(); renderTrending(); showDropdown(); });
+      searchInput.addEventListener('input', function() {
+        const val = this.value;
+        if (searchWrapper) searchWrapper.classList.toggle('has-value', val.length > 0);
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => this.form.submit(), 300);
+        showDropdown();
+      });
+      searchInput.addEventListener('blur', () => setTimeout(hideDropdown, 150));
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') { this.value = ''; hideDropdown(); this.form.submit(); }
+      });
+    }
+    if (searchClear) {
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        if (searchWrapper) searchWrapper.classList.remove('has-value');
+        hideDropdown();
+        searchInput.form.submit();
+      });
+    }
+    document.addEventListener('click', function(e) {
+      if (searchWrapper && !searchWrapper.contains(e.target)) hideDropdown();
+    });
+    renderRecent();
+    renderTrending();
+  });
   </script>
 </body>
 </html>

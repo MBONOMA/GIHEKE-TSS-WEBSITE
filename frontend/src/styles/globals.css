@@ -70,6 +70,37 @@
   .gradient-overlay {
     @apply bg-gradient-to-r from-primary-900/90 to-primary-800/80;
   }
+
+  @media (max-width: 768px) {
+    .search-mobile-full {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9999;
+      background: white;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .search-mobile-full input {
+      width: 100%;
+      font-size: 16px;
+      padding: 0.75rem 1rem;
+      border: 2px solid #2563eb;
+      border-radius: 0.5rem;
+      outline: none;
+    }
+    .search-mobile-full .search-dropdown {
+      margin-top: 0.5rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.75rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+  }
 }
 
 @layer utilities {

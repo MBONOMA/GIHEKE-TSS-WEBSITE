@@ -9,23 +9,6 @@ import { NewsPost, Event } from '@/types';
 import { formatDate } from '@/lib/utils';
 import { HiCalendar, HiClock, HiLocationMarker, HiUser, HiChevronRight, HiArrowRight, HiPhotograph, HiTag } from 'react-icons/hi';
 
-function HeroBanner() {
-  return (
-    <section className="relative py-24 md:py-32 overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-br from-primary-900 via-primary-800 to-primary-950" />
-      <div className="absolute inset-0 opacity-20" style={{
-        backgroundImage: 'radial-gradient(circle at 30% 70%, rgba(59,130,246,0.3) 0%, transparent 50%), radial-gradient(circle at 70% 30%, rgba(22,163,74,0.2) 0%, transparent 50%)'
-      }} />
-      <div className="relative max-w-7xl mx-auto px-4 text-center">
-        <h1 className="text-4xl md:text-6xl font-heading font-extrabold text-white mb-4">News & Events</h1>
-        <div className="w-20 h-1 bg-accent-400 mx-auto rounded-full mb-4" />
-        <p className="text-lg text-primary-100/90 max-w-2xl mx-auto">Stay updated with the latest news, announcements, and upcoming events at our school.</p>
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white to-transparent" />
-    </section>
-  );
-}
-
 function NewsCard({ post }: { post: NewsPost }) {
   return (
     <Link href={`/public/news/${post.slug}`} className="card border border-gray-100 hover:border-primary-200 hover:shadow-xl transition-all group block overflow-hidden">
@@ -161,8 +144,6 @@ export default function NewsPage() {
 
   return (
     <PublicLayout>
-      <HeroBanner />
-
       <section className="py-12 bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center gap-1 p-1 bg-gray-100 rounded-xl w-fit mx-auto">

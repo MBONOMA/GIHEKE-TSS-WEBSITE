@@ -45,6 +45,36 @@ $levels = ['Level 3', 'Level 4', 'Level 5'];
     <link href="assets/css/giheke-toast.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css">
+    <style>
+      .search-advanced { position: relative; }
+      .search-advanced input { width: 100%; padding: 10px 16px 10px 42px; border: 2px solid #e8e8e8; border-radius: 12px; font-size: 0.9rem; background: #fafafa; transition: all 0.2s; }
+      .search-advanced input:focus { border-color: #525FE1; outline: none; background: #fff; box-shadow: 0 0 0 4px rgba(82,95,225,0.08); }
+      .search-advanced .search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+      .search-advanced .clear-btn { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; border-radius: 50%; border: none; background: #e2e8f0; color: #475569; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 12px; }
+      .search-advanced .clear-btn:hover { background: #cbd5e1; }
+      .search-advanced.has-value .clear-btn { display: inline-flex; }
+      .search-dropdown { display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); z-index: 1050; max-height: 320px; overflow-y: auto; }
+      .search-dropdown.show { display: block; }
+      .search-dropdown .sd-section { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; }
+      .search-dropdown .sd-section:last-child { border-bottom: none; }
+      .search-dropdown .sd-label { font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+      .search-dropdown .sd-chip { display: inline-block; padding: 6px 12px; border-radius: 20px; font-size: 13px; background: #f1f5f9; color: #334155; border: none; cursor: pointer; margin: 3px 4px 3px 0; transition: all 0.15s; }
+      .search-dropdown .sd-chip:hover { background: #e0e7ff; color: #4338ca; }
+      .search-dropdown .sd-item { width: 100%; text-align: left; padding: 10px 14px; border: none; background: transparent; font-size: 14px; color: #334155; cursor: pointer; border-radius: 8px; margin: 2px 0; }
+      .search-dropdown .sd-item:hover { background: #eff6ff; color: #1d4ed8; }
+      .search-dropdown .sd-item strong { color: #1e40af; }
+      .no-results-box { text-align: center; padding: 40px 20px; background: #fff; border-radius: 16px; border: 1px solid #e5e7eb; margin-top: 16px; color: #94a3b8; }
+      .no-results-box i { font-size: 40px; display: block; margin-bottom: 12px; color: #cbd5e1; }
+      .no-results-box h4 { color: #475569; font-weight: 600; margin-bottom: 6px; }
+      .no-results-box p { font-size: 13px; max-width: 360px; margin: 0 auto 16px; color: #64748b; }
+      @media (max-width: 768px) {
+        .search-advanced { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; z-index: 1060; padding: 12px; display: flex; flex-direction: column; }
+        .search-advanced .search-bar-mobile-top { display: flex !important; align-items: center; gap: 8px; }
+        .search-advanced input { font-size: 16px; padding: 12px 44px 12px 42px; border-radius: 10px; }
+        .search-advanced .search-dropdown { position: static; border-radius: 12px; margin-top: 10px; max-height: calc(100vh - 120px); }
+        .search-mobile-close { display: inline-flex !important; }
+      }
+    </style>
 </head>
 <body>
     <header id="header" class="header fixed-top d-flex align-items-center">
@@ -131,7 +161,21 @@ $levels = ['Level 3', 'Level 4', 'Level 5'];
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label">Search (name or code)</label>
-                                <input type="text" class="form-modern" name="search" placeholder="Search..." value="<?php echo htmlspecialchars($search); ?>">
+                                <div class="search-advanced" id="searchAdvancedStudent">
+                                    <i class="bi bi-search search-icon"></i>
+                                    <input type="text" id="studentSearchInput" class="form-modern" name="search" placeholder="Search..." value="<?php echo htmlspecialchars($search); ?>">
+                                    <button type="button" class="clear-btn" id="studentSearchClear"><i class="bi bi-x"></i></button>
+                                    <div class="search-dropdown" id="studentSearchDropdown">
+                                        <div class="sd-section">
+                                            <div class="sd-label"><i class="bi bi-clock-history"></i> Recent Searches</div>
+                                            <div id="studentRecentList"><p style="font-size:12px;color:#94a3b8;">No recent searches</p></div>
+                                        </div>
+                                        <div class="sd-section">
+                                            <div class="sd-label"><i class="bi bi-arrow-up-circle"></i> Trending</div>
+                                            <div id="studentTrendingList"></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-md-2 d-flex align-items-end">
                                 <button type="submit" class="btn-modern btn-modern-primary w-100"><i class="bi bi-search"></i> Filter</button>
@@ -223,24 +267,85 @@ $levels = ['Level 3', 'Level 4', 'Level 5'];
     </script>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const selectAll = document.getElementById('selectAll');
-        const selectItems = document.querySelectorAll('.select-item');
-        const deleteSelectedBtn = document.getElementById('deleteSelected');
-        if (selectAll) {
-            selectAll.addEventListener('change', function() {
-                selectItems.forEach(cb => cb.checked = this.checked);
+        const searchInput = document.getElementById('studentSearchInput');
+        const searchClear = document.getElementById('studentSearchClear');
+        const searchDropdown = document.getElementById('studentSearchDropdown');
+        const searchWrapper = document.getElementById('searchAdvancedStudent');
+        const recentList = document.getElementById('studentRecentList');
+        const trendingList = document.getElementById('studentTrendingList');
+        let debounceTimer = null;
+
+        const trending = ['Grade 10', 'Level 5', 'Software Dev', 'Networking', 'Accounting'];
+        let recent = [];
+        try { const stored = localStorage.getItem('studentRecentSearches'); if (stored) recent = JSON.parse(stored).slice(0, 5); } catch {}
+
+        function saveRecent(q) {
+            recent = [q, ...recent.filter(r => r !== q)].slice(0, 5);
+            localStorage.setItem('studentRecentSearches', JSON.stringify(recent));
+            renderRecent();
+        }
+
+        function renderRecent() {
+            if (!recentList) return;
+            if (recent.length === 0) {
+                recentList.innerHTML = '<p style="font-size:12px;color:#94a3b8;">No recent searches</p>';
+                return;
+            }
+            recentList.innerHTML = recent.map(r => `<button type="button" class="sd-chip" data-search="${r}">${r}</button>`).join('');
+            recentList.querySelectorAll('.sd-chip').forEach(btn => {
+                btn.addEventListener('click', () => { searchInput.value = btn.dataset.search; searchInput.form.submit(); });
             });
         }
-        if (deleteSelectedBtn) {
-            deleteSelectedBtn.addEventListener('click', function() {
-                const selected = [];
-                selectItems.forEach(cb => { if (cb.checked) selected.push(cb.value); });
-                if (selected.length === 0) { alert('Please select items to delete'); return; }
-                if (confirm('Are you sure you want to delete ' + selected.length + ' selected student(s)?')) {
-                    window.location.href = 'deletecontents.php?deletestudentids=' + selected.join(',');
+
+        function renderTrending() {
+            if (!trendingList) return;
+            trendingList.innerHTML = trending.map(t => `<button type="button" class="sd-chip" data-search="${t}">${t}</button>`).join('');
+            trendingList.querySelectorAll('.sd-chip').forEach(btn => {
+                btn.addEventListener('click', () => { searchInput.value = btn.dataset.search; searchInput.form.submit(); });
+            });
+        }
+
+        function highlight(text, q) {
+            if (!q) return text;
+            const idx = text.toLowerCase().indexOf(q.toLowerCase());
+            if (idx === -1) return text;
+            return text.slice(0, idx) + '<strong>' + text.slice(idx, idx + q.length) + '</strong>' + text.slice(idx + q.length);
+        }
+
+        function showDropdown() { if (searchDropdown) searchDropdown.classList.add('show'); }
+        function hideDropdown() { if (searchDropdown) searchDropdown.classList.remove('show'); }
+
+        if (searchInput) {
+            searchInput.addEventListener('focus', () => { renderRecent(); renderTrending(); showDropdown(); });
+            searchInput.addEventListener('input', function() {
+                const val = this.value;
+                if (searchWrapper) {
+                    searchWrapper.classList.toggle('has-value', val.length > 0);
                 }
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    this.form.submit();
+                }, 300);
+                showDropdown();
+            });
+            searchInput.addEventListener('blur', () => setTimeout(hideDropdown, 150));
+            searchInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') { this.value = ''; hideDropdown(); this.form.submit(); }
             });
         }
+        if (searchClear) {
+            searchClear.addEventListener('click', () => {
+                searchInput.value = '';
+                if (searchWrapper) searchWrapper.classList.remove('has-value');
+                hideDropdown();
+                searchInput.form.submit();
+            });
+        }
+        document.addEventListener('click', function(e) {
+            if (searchWrapper && !searchWrapper.contains(e.target)) hideDropdown();
+        });
+        renderRecent();
+        renderTrending();
     });
     </script>
 </body>
