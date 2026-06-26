@@ -1,0 +1,23 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /trainer/
+Disallow: /Student Task/
+Disallow: /infobip-api-php-client/
+Disallow: /blog/vendor/
+Disallow: /blog/plugins/
+Disallow: /assets/vendor/
+
+# AI Crawler restrictions (optional - remove if you want AI indexing)
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+# Sitemap
+Sitemap: https://localhost/Giheke/sitemap.php
+Sitemap: https://localhost/Giheke/assets/seo-meta.php

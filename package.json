@@ -1,0 +1,16 @@
+{
+  "name": "giheke-tss-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GIHEKE TSS - School Management System + Public Website",
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev:backend": "cd backend && npm run start:dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "seed": "cd backend && npm run seed",
+    "migration:run": "cd backend && npm run migration:run",
+    "migration:generate": "cd backend && npm run migration:generate"
+  }
+}
