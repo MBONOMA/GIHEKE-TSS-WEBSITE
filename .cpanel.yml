@@ -1,4 +1,5 @@
+---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/giheketss@gmail.com/public_html/
-    - /bin/cp -r * $DEPLOYPATH
+    - export DEPLOYPATH=/home/giheketss/public_html/
+    - /bin/cp -R * $DEPLOYPATH
