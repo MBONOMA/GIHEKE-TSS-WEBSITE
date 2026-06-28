@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/xml; charset=utf-8');
-$baseUrl = 'https://localhost/Giheke';
+$baseUrl = 'https://giheketss.ac.rw';
 $pages = [
     ['url' => '/', 'priority' => '1.0', 'freq' => 'daily'],
     ['url' => '/index.php', 'priority' => '1.0', 'freq' => 'daily'],

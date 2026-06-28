@@ -7,8 +7,8 @@
 // If $pageTitle is not set, use default
 $pageTitle = $pageTitle ?? 'GIHEKE Technical Secondary School';
 $pageDescription = $pageDescription ?? 'GIHEKE Technical Secondary School in Rusizi District, Rwanda offers 7 technical trades: Software Development, Network and internet technology, Computer Systems & Architecture, Electrical Technology, Electronics & Telecom, Building Construction, and Professional Accounting.';
-$pageImage = $pageImage ?? 'https://localhost/Giheke/img/giheke logo.webp';
-$pageUrl = $pageUrl ?? 'https://localhost/Giheke' . ($_SERVER['REQUEST_URI'] ?? '/');
+$pageImage = $pageImage ?? 'https://giheketss.ac.rw/img/giheke logo.webp';
+$pageUrl = $pageUrl ?? 'https://giheketss.ac.rw' . ($_SERVER['REQUEST_URI'] ?? '/');
 $pageKeywords = $pageKeywords ?? 'GIHEKE TSS, Technical Secondary School, Rusizi, Rwanda, TVET, Software Development, Network and internet technology, Electrical Technology, Building Construction, Professional Accounting';
 
 // Add site name to title if not already present
@@ -53,8 +53,8 @@ $canonicalUrl = rtrim($canonicalUrl, '/');
   "@type": "EducationalOrganization",
   "name": "GIHEKE Technical Secondary School",
   "description": "Technical secondary school offering 7 trade programs in Rusizi District, Rwanda",
-  "url": "https://localhost/Giheke",
-  "logo": "https://localhost/Giheke/img/giheke logo.webp",
+  "url": "https://giheketss.ac.rw",
+  "logo": "https://giheketss.ac.rw/img/giheke logo.webp",
   "address": {
     "@type": "PostalAddress",
     "streetAddress": "Giheke Sector",

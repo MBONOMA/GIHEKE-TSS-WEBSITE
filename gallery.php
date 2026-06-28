@@ -2,7 +2,7 @@
 $pageTitle = 'School Gallery - GIHEKE TSS';
 $pageDescription = 'Explore photos of GIHEKE Technical Secondary School campus, workshops, classrooms, and student activities in Rusizi District, Rwanda.';
 $pageKeywords = 'GIHEKE gallery, school photos, technical school, Rwanda education, campus';
-include('admin/includes/connection.php');
+include('includes/connection.php');
 $pageUrl = 'https://localhost/Giheke/gallery.php';
 include('assets/seo-meta.php');
 

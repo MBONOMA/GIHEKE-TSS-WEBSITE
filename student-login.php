@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('admin/includes/connection.php');
+include('includes/connection.php');
 
 // Ensure tbl_stdaccounts table exists
 mysqli_query($conn, "CREATE TABLE IF NOT EXISTS `tbl_stdaccounts` (

@@ -1,0 +1,18 @@
+RewriteEngine On
+RewriteBase /
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^elearning\.php$ /Giheke/elearning.php [L]
+RewriteRule ^gallery\.php$ /Giheke/gallery.php [L]
+RewriteRule ^student-login\.php$ /Giheke/student-login.php [L]
+RewriteRule ^student-verification\.php$ /Giheke/student-verification.php [L]
+RewriteRule ^SchoolApplication\.php$ /Giheke/SchoolApplication.php [L]
+RewriteRule ^sitemap\.php$ /Giheke/sitemap.php [L]
+
+RewriteCond %{THE_REQUEST} /Giheke/([^\s]+) [NC]
+RewriteRule ^ %1 [R=301,L]
+
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule ^(.*)$ /Giheke/$1 [L,QSA]

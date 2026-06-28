@@ -1,6 +1,6 @@
 <?php
 session_start();
-include('admin/includes/connection.php');
+include('includes/connection.php');
 
 // Load site settings
 $siteSettings = [];

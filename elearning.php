@@ -3,7 +3,7 @@ session_start();
 $pageTitle = 'E-Learning Library - Books & Past Papers';
 $pageDescription = 'Access free study materials, textbooks, and past national examination papers organized by trade at GIHEKE Technical Secondary School.';
 $pageKeywords = 'e-learning, books, past papers, textbooks, study materials, GIHEKE, Rwanda education, exam papers';
-include('admin/includes/connection.php');
+include('includes/connection.php');
 include('assets/seo-meta.php');
 
 $dept_list = mysqli_query($conn, "SELECT DISTINCT department FROM tbl_books WHERE 1 ORDER BY department");

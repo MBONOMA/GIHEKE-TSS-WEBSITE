@@ -4,7 +4,7 @@ $success = false;
 
 if(isset($_POST['submit'])){
 
-  include 'admin/includes/connection.php';
+  include 'includes/connection.php';
   $status_check = "SELECT * FROM `tbl_aply_status` WHERE id = 1";
   $check = mysqli_query($conn,$status_check);
   $status_call = mysqli_fetch_assoc($check);
@@ -153,7 +153,7 @@ if(empty($errors)){
 <div class="announcement-bar">
     <div class="announcement-inner">
         <?php
-        include 'admin/includes/connection.php';
+        include 'includes/connection.php';
         $announce_query = "SELECT Announcement FROM `tbl_announcement` LIMIT 1";
         $announce_run = mysqli_query($conn, $announce_query);
         $announce = mysqli_fetch_assoc($announce_run);
